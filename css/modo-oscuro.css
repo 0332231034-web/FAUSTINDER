@@ -1,0 +1,66 @@
+body.tema-oscuro {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.tema-oscuro .panel-principal-faustinder,
+body.tema-oscuro .tarjeta-principal-faustinder,
+body.tema-oscuro .panel-superusuario,
+body.tema-oscuro .contenedor-superusuario,
+body.tema-oscuro .panel-formulario-faustinder,
+body.tema-oscuro .formulario-datos-faustinder,
+body.tema-oscuro .contenedor-login,
+body.tema-oscuro .formulario-login,
+body.tema-oscuro .contenedor-registro,
+body.tema-oscuro .contenedor-inicio,
+body.tema-oscuro .tarjeta-inicio {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.tema-oscuro .encabezado-faustinder,
+body.tema-oscuro .encabezado-superusuario {
+    background-color: #1a1a1a;
+}
+
+body.tema-oscuro .menu-faustinder-moderno a,
+body.tema-oscuro .menu-superusuario a {
+    color: #e0e0e0;
+}
+
+body.tema-oscuro input,
+body.tema-oscuro select,
+body.tema-oscuro textarea {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.tema-oscuro .tarjeta-perfil-completo,
+body.tema-oscuro .tarjeta-confirmacion-match,
+body.tema-oscuro .fila-resultado-amigo,
+body.tema-oscuro .fila-vermatch,
+body.tema-oscuro .fila-usuario-super,
+body.tema-oscuro .tarjeta-chat,
+body.tema-oscuro .cuerpo-chat {
+    background-color: #252525;
+    border-color: #3a3a3a;
+}
+
+body.tema-oscuro .burbuja-otro {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.tema-oscuro .burbuja-propia {
+    background-color: #1e5aa0;
+    color: #fff;
+}
+
+body.tema-oscuro .dropdown-notificaciones,
+body.tema-oscuro .contenido-dropdown,
+body.tema-oscuro .contenido-dropdown-super {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
