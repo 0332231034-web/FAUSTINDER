@@ -22,14 +22,22 @@ if ($r["descripcion"] == "" || $r["descripcion"] == NULL) { $datosCompletos = fa
 // Foto principal desde tbfoto
 $sqlFotoPrincipal = "select ruta from tbfoto where codigo_persona='$codigo' and principal='S' limit 1";
 $fFotoPrincipal = mysqli_query($cn, $sqlFotoPrincipal);
-$tieneFoto = false;
+$tienePrincipal = false;
 $rutaFotoWeb = "";
 
 if (mysqli_num_rows($fFotoPrincipal) > 0) {
     $fotoPrincipal = mysqli_fetch_assoc($fFotoPrincipal);
     $rutaFotoWeb = $fotoPrincipal["ruta"];
-    $tieneFoto = true;
+    $tienePrincipal = true;
 }
+
+// Total de fotos subidas (mínimo 3 para poder empezar con los matches)
+$sqlTotalFotos = "select count(*) as total from tbfoto where codigo_persona='$codigo'";
+$fTotalFotos = mysqli_query($cn, $sqlTotalFotos);
+$rTotalFotos = mysqli_fetch_assoc($fTotalFotos);
+$totalFotos = $rTotalFotos["total"];
+
+$fotosCompletas = ($totalFotos >= 3 && $tienePrincipal == true);
 
 $rutaPasswordFisica = __DIR__ . "/password/cambio_" . $codigo . ".txt";
 $passwordCambiado = false;
@@ -40,7 +48,7 @@ if (file_exists($rutaPasswordFisica)) {
 
 $servicioActivo = false;
 
-if ($datosCompletos == true && $tieneFoto == true && $passwordCambiado == true) {
+if ($datosCompletos == true && $fotosCompletas == true && $passwordCambiado == true) {
     $servicioActivo = true;
 }
 
@@ -167,7 +175,7 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
             <?php } else { ?>
 
-                <a href="#" class="bloqueado-faustinder" onclick="alert('Primero debes completar tus datos, insertar tu foto de perfil y cambiar tu contraseña.');">
+                <a href="#" class="bloqueado-faustinder" onclick="alert('Primero debes completar tus datos, insertar 3 imágenes y elegir tu foto de perfil, y cambiar tu contraseña.');">
                     Buscar Amigos
                 </a>
 
@@ -185,11 +193,11 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
             <?php } else { ?>
 
-                <a href="#" class="bloqueado-faustinder" onclick="alert('Primero debes completar tus datos, insertar tu foto de perfil y cambiar tu contraseña.');">
+                <a href="#" class="bloqueado-faustinder" onclick="alert('Primero debes completar tus datos, insertar 3 imágenes y elegir tu foto de perfil, y cambiar tu contraseña.');">
                     Ver Match
                 </a>
 
-                <a href="#" class="bloqueado-faustinder" onclick="alert('Primero debes completar tus datos, insertar tu foto de perfil y cambiar tu contraseña.');">
+                <a href="#" class="bloqueado-faustinder" onclick="alert('Primero debes completar tus datos, insertar 3 imágenes y elegir tu foto de perfil, y cambiar tu contraseña.');">
                     Mensajes
                 </a>
 
@@ -214,13 +222,13 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
                         Falta completar tus datos personales
                     </div>
 
-                    <?php if ($tieneFoto == true) { ?>
+                    <?php if ($fotosCompletas == true) { ?>
                         <div class="paso-listo">
-                            Foto de perfil registrada
+                            Fotos de perfil registradas (<?php echo $totalFotos; ?>/10)
                         </div>
                     <?php } else { ?>
                         <div class="paso-pendiente">
-                            Falta insertar tu foto de perfil
+                            Falta insertar 3 imágenes y elegir una como foto de perfil
                         </div>
                     <?php } ?>
 
@@ -257,7 +265,7 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
                     <div class="foto-perfil-completo">
 
-                        <?php if ($tieneFoto == true) { ?>
+                        <?php if ($tienePrincipal == true) { ?>
 
                             <img src="<?php echo $rutaFotoWeb . '?v=' . time(); ?>" alt="Foto de perfil">
 
@@ -310,13 +318,13 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
                     <div class="lista-pasos-faustinder">
 
-                        <?php if ($tieneFoto == true) { ?>
+                        <?php if ($fotosCompletas == true) { ?>
                             <div class="paso-listo">
-                                Foto de perfil registrada
+                                Fotos de perfil registradas (<?php echo $totalFotos; ?>/10)
                             </div>
                         <?php } else { ?>
                             <div class="paso-pendiente">
-                                Falta insertar tu foto de perfil
+                                Falta insertar 3 imágenes y elegir una como foto de perfil
                             </div>
                         <?php } ?>
 

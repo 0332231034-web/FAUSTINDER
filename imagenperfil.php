@@ -9,7 +9,7 @@ $sqlFotos = "select * from tbfoto where codigo_persona='$codigoSQL' order by pri
 $fFotos = mysqli_query($cn, $sqlFotos);
 $totalFotos = mysqli_num_rows($fFotos);
 
-$puedeSubir = $totalFotos < 5;
+$puedeSubir = $totalFotos < 10;
 
 $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 ?>
@@ -75,7 +75,7 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
             <h2>Fotos de perfil</h2>
 
             <p class="texto-formulario-faustinder">
-                Puedes subir hasta 5 fotos. Elige cuál es tu foto principal, la que verán los demás.
+                Puedes subir hasta 10 fotos. Elige cuál es tu foto principal, la que verán los demás.
             </p>
 
             <?php
@@ -150,7 +150,7 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
                 <form action="p_imagenperfil.php" method="post" enctype="multipart/form-data">
 
                     <div class="grupo-datos-faustinder">
-                        <label>Archivo PNG (<?php echo $totalFotos; ?>/5)</label>
+                        <label>Archivo PNG (<?php echo $totalFotos; ?>/10)</label>
                         <input type="file" name="archivo" accept=".png" required>
                     </div>
 

@@ -20,12 +20,14 @@ for ($i = 0; $i < 8; $i++) {
     $password = $password . substr($caracteres, $posicion, 1);
 }
 
+$passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
 $nickSQL = mysqli_real_escape_string($cn, $nick);
 $nombreSQL = mysqli_real_escape_string($cn, $nombre);
 $apaternoSQL = mysqli_real_escape_string($cn, $apaterno);
 $amaternoSQL = mysqli_real_escape_string($cn, $amaterno);
 $correoSQL = mysqli_real_escape_string($cn, $correo);
-$passwordSQL = mysqli_real_escape_string($cn, $password);
+$passwordSQL = mysqli_real_escape_string($cn, $passwordHash);
 
 $sqlNick = "select * from tbpersona
             where nick = '$nickSQL'";

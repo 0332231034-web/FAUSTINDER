@@ -13,6 +13,7 @@ $celular = trim($_POST["txtcelular"]);
 $escuela = trim($_POST["cboescuela"]);
 $sexo = trim($_POST["cbosexo"]);
 $descripcion = trim($_POST["txtdescripcion"]);
+$nuevaPassword = trim($_POST["txtnuevapassword"]);
 
 if (!isset($_POST["cbotipo"])) {
     header("location: editarusuario-super.php?codigo=$codigoPersona&error=vacio");
@@ -23,6 +24,12 @@ $tipo = implode(", ", $_POST["cbotipo"]);
 
 if ($nick == "" || $correo == "" || $nombre == "" || $apaterno == "" || $amaterno == "" || $celular == "" || $escuela == "" || $sexo == "" || $tipo == "" || $descripcion == "") {
     header("location: editarusuario-super.php?codigo=$codigoPersona&error=vacio");
+    exit();
+}
+
+/* La contraseña es opcional: si el admin escribió algo, debe medir exactamente 8 caracteres */
+if ($nuevaPassword != "" && strlen($nuevaPassword) != 8) {
+    header("location: editarusuario-super.php?codigo=$codigoPersona&error=password");
     exit();
 }
 
@@ -73,6 +80,26 @@ $sql = "update tbpersona
         where codigo='$codigoPersona'";
 
 mysqli_query($cn, $sql);
+
+/* Si el admin escribió una nueva contraseña, se actualiza aparte (con hash) */
+if ($nuevaPassword != "") {
+
+    $nuevaPasswordHash = password_hash($nuevaPassword, PASSWORD_DEFAULT);
+    $nuevaPasswordHashSQL = mysqli_real_escape_string($cn, $nuevaPasswordHash);
+
+    $sqlPassword = "update tbpersona
+                    set password='$nuevaPasswordHashSQL'
+                    where codigo='$codigoPersona'";
+
+    mysqli_query($cn, $sqlPassword);
+
+    /* Como el admin le puso una contraseña nueva "de fábrica", se le
+       vuelve a pedir que la cambie por una propia al iniciar sesión. */
+    $archivoFlag = "password/cambio_" . $codigoPersona . ".txt";
+    if (file_exists($archivoFlag)) {
+        unlink($archivoFlag);
+    }
+}
 
 header("location: editarusuario-super.php?codigo=$codigoPersona&ok=1");
 exit();

@@ -28,19 +28,19 @@ if ($actual == $nueva) {
     exit();
 }
 
-$actualSQL = mysqli_real_escape_string($cn, $actual);
-$nuevaSQL = mysqli_real_escape_string($cn, $nueva);
-
 $sql = "select * from tbsuperusuario
-        where codigo='$codigoSuper'
-        and password='$actualSQL'";
+        where codigo='$codigoSuper'";
 
 $f = mysqli_query($cn, $sql);
+$r = mysqli_num_rows($f) > 0 ? mysqli_fetch_assoc($f) : null;
 
-if (mysqli_num_rows($f) == 0) {
+if ($r === null || !password_verify($actual, $r["password"])) {
     header("location: cambiarpassword-super.php?error=actual");
     exit();
 }
+
+$nuevaHash = password_hash($nueva, PASSWORD_DEFAULT);
+$nuevaSQL = mysqli_real_escape_string($cn, $nuevaHash);
 
 $sqlActualizar = "update tbsuperusuario
                   set password='$nuevaSQL'

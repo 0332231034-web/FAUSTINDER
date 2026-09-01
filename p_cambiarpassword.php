@@ -24,21 +24,20 @@ if (strlen($nueva) != 8) {
     exit();
 }
 
-$actualSQL = mysqli_real_escape_string($cn, $actual);
-$nuevaSQL = mysqli_real_escape_string($cn, $nueva);
-
 /* Validar contraseña actual */
 $sql = "select * from tbpersona
-        where codigo='$codigo'
-        and password='$actualSQL'";
+        where codigo='$codigo'";
 
 $f = mysqli_query($cn, $sql);
+$r = mysqli_num_rows($f) > 0 ? mysqli_fetch_assoc($f) : null;
 
-if (mysqli_num_rows($f) == 0) {
+if ($r === null || !password_verify($actual, $r["password"])) {
     header("location: cambiarpassword.php?error=actual");
     exit();
 }
 
+$nuevaHash = password_hash($nueva, PASSWORD_DEFAULT);
+$nuevaSQL = mysqli_real_escape_string($cn, $nuevaHash);
 
 $sqlActualizar = "update tbpersona
                   set password='$nuevaSQL'

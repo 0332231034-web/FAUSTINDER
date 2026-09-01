@@ -11,17 +11,14 @@ if ($nick == "" || $password == "") {
 }
 
 $nickSQL = mysqli_real_escape_string($cn, $nick);
-$passwordSQL = mysqli_real_escape_string($cn, $password);
 
 $sqlSuper = "select * from tbsuperusuario
-             where usuario='$nickSQL'
-             and password='$passwordSQL'";
+             where usuario='$nickSQL'";
 
 $fSuper = mysqli_query($cn, $sqlSuper);
+$super = mysqli_num_rows($fSuper) > 0 ? mysqli_fetch_assoc($fSuper) : null;
 
-if (mysqli_num_rows($fSuper) > 0) {
-
-    $super = mysqli_fetch_assoc($fSuper);
+if ($super !== null && password_verify($password, $super["password"])) {
 
     $_SESSION["authsuper"] = "1";
     $_SESSION["codigosuper"] = $super["codigo"];
@@ -36,17 +33,15 @@ if (mysqli_num_rows($fSuper) > 0) {
 
 
 $sqlUsuario = "select * from tbpersona
-               where nick='$nickSQL'
-               and password='$passwordSQL'";
+               where nick='$nickSQL'";
 
 $fUsuario = mysqli_query($cn, $sqlUsuario);
+$r = mysqli_num_rows($fUsuario) > 0 ? mysqli_fetch_assoc($fUsuario) : null;
 
-if (mysqli_num_rows($fUsuario) == 0) {
+if ($r === null || !password_verify($password, $r["password"])) {
     header("location: login.php?error=datos");
     exit();
 }
-
-$r = mysqli_fetch_assoc($fUsuario);
 
 $codigoUsuario = $r["codigo"];
 $hoy = date("Y-m-d");

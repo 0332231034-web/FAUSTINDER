@@ -8,6 +8,7 @@ $sql = "select * from tbsuperusuario where codigo='$codigoSuper'";
 $f = mysqli_query($cn, $sql);
 
 if (mysqli_num_rows($f) == 0) {
+    session_destroy();
     header("location: login.php");
     exit();
 }

@@ -1,11 +1,37 @@
+/* ===================================================== */
+/* MODO OSCURO — FAUSTINDER                               */
+/* Redefine las variables de color del tema (--azul-      */
+/* principal, --azul-texto, --borde, etc.) para que       */
+/* cualquier elemento del sitio que ya las use se adapte   */
+/* automáticamente, sin tener que pintar cada clase suelta.*/
+/* ===================================================== */
+
 body.tema-oscuro {
-    background-color: #121212;
-    color: #e0e0e0;
+    --azul-principal: #5aa9e6;
+    --azul-secundario: #3d8fd1;
+    --celeste: #3f6f96;
+    --celeste-claro: #1e2b38;
+    --celeste-suave: #182430;
+    --azul-texto: #dbe7f0;
+    --gris-texto: #9fb4c4;
+    --borde: #2f4354;
+    --blanco: #1b2836;
+    --sombra: rgba(0, 0, 0, 0.45);
+
+    background: linear-gradient(135deg, #0d1420, #121b28, #17222f);
+    color: var(--azul-texto);
 }
 
+/* ========================= */
+/* PANELES Y TARJETAS BASE   */
+/* ========================= */
+
 body.tema-oscuro .panel-principal-faustinder,
+body.tema-oscuro .panel-superusuario {
+    background: linear-gradient(135deg, #0d1420, #121b28, #17222f);
+}
+
 body.tema-oscuro .tarjeta-principal-faustinder,
-body.tema-oscuro .panel-superusuario,
 body.tema-oscuro .contenedor-superusuario,
 body.tema-oscuro .panel-formulario-faustinder,
 body.tema-oscuro .formulario-datos-faustinder,
@@ -14,42 +40,147 @@ body.tema-oscuro .formulario-login,
 body.tema-oscuro .contenedor-registro,
 body.tema-oscuro .contenedor-inicio,
 body.tema-oscuro .tarjeta-inicio {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
+    background-color: #141e29;
+    color: var(--azul-texto);
+    border-color: var(--borde);
 }
 
 body.tema-oscuro .encabezado-faustinder,
 body.tema-oscuro .encabezado-superusuario {
-    background-color: #1a1a1a;
+    background-color: transparent;
 }
 
-body.tema-oscuro .menu-faustinder-moderno a,
-body.tema-oscuro .menu-superusuario a {
-    color: #e0e0e0;
+body.tema-oscuro .encabezado-faustinder p,
+body.tema-oscuro .encabezado-superusuario p {
+    color: var(--gris-texto);
 }
+
+/* Cuerpo principal (bienvenida) */
+body.tema-oscuro .cuerpo-principal-faustinder {
+    background: linear-gradient(135deg, #101a24, #16212c);
+    box-shadow: inset 6px 6px 15px rgba(0, 0, 0, 0.35),
+                inset -6px -6px 15px rgba(255, 255, 255, 0.02);
+    border-color: var(--borde);
+}
+
+/* Tarjeta de perfil (foto + tabla de datos) */
+body.tema-oscuro .tarjeta-perfil-completo {
+    background-color: #141e29;
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .tabla-perfil-completo td {
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .sin-foto-perfil,
+body.tema-oscuro .sin-foto-confirmacion {
+    background: var(--celeste-claro);
+}
+
+/* Pasos pendientes / completados, con más contraste que en modo claro */
+body.tema-oscuro .paso-listo {
+    background-color: #123524;
+    color: #6fe3a8;
+    border-color: #1d5b3c;
+}
+
+body.tema-oscuro .paso-pendiente {
+    background-color: #3a2c05;
+    color: #ffcf5c;
+    border-color: #6b4f0c;
+}
+
+/* ========================= */
+/* MENÚ SUPERIOR              */
+/* ========================= */
+
+body.tema-oscuro .menu-faustinder-moderno a,
+body.tema-oscuro .menu-superusuario a,
+body.tema-oscuro .dropdown-datos .btn-dropdown {
+    background: var(--celeste-claro);
+    color: var(--azul-principal);
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .menu-faustinder-moderno a:hover,
+body.tema-oscuro .dropdown-datos .btn-dropdown:hover {
+    background: #24384a;
+}
+
+body.tema-oscuro .menu-faustinder-moderno .activo-faustinder {
+    background: linear-gradient(135deg, var(--azul-principal), var(--azul-secundario));
+    color: #0d1420;
+}
+
+body.tema-oscuro .menu-faustinder-moderno .bloqueado-faustinder {
+    background: #1a2430;
+    color: #55697a;
+    border-color: #263241;
+}
+
+/* Dropdown "Tus Datos" y notificaciones */
+body.tema-oscuro .contenido-dropdown,
+body.tema-oscuro .contenido-dropdown-super,
+body.tema-oscuro .dropdown-notificaciones {
+    background-color: #182430;
+    border-color: var(--borde);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+body.tema-oscuro .contenido-dropdown a {
+    background-color: transparent;
+    color: var(--azul-principal);
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .contenido-dropdown a:hover {
+    background: var(--celeste-claro);
+}
+
+body.tema-oscuro .item-notificacion {
+    border-color: #24313e;
+}
+
+body.tema-oscuro .notif-no-leida {
+    background-color: #17293a;
+}
+
+body.tema-oscuro .notif-vacia,
+body.tema-oscuro .fecha-notif {
+    color: #6c8092;
+}
+
+/* ========================= */
+/* FORMULARIOS                */
+/* ========================= */
 
 body.tema-oscuro input,
 body.tema-oscuro select,
 body.tema-oscuro textarea {
-    background-color: #2a2a2a;
-    color: #e0e0e0;
-    border-color: #444;
+    background-color: #182430;
+    color: var(--azul-texto);
+    border-color: var(--borde);
 }
 
-body.tema-oscuro .tarjeta-perfil-completo,
+/* ========================= */
+/* TARJETAS Y FILAS DEL RESTO DEL SITIO */
+/* ========================= */
+
 body.tema-oscuro .tarjeta-confirmacion-match,
 body.tema-oscuro .fila-resultado-amigo,
 body.tema-oscuro .fila-vermatch,
 body.tema-oscuro .fila-usuario-super,
 body.tema-oscuro .tarjeta-chat,
-body.tema-oscuro .cuerpo-chat {
-    background-color: #252525;
-    border-color: #3a3a3a;
+body.tema-oscuro .cuerpo-chat,
+body.tema-oscuro .galeria-fotos-perfil-grid img {
+    background-color: #141e29;
+    border-color: var(--borde);
 }
 
 body.tema-oscuro .burbuja-otro {
-    background-color: #333;
-    color: #e0e0e0;
+    background-color: #24313e;
+    color: var(--azul-texto);
 }
 
 body.tema-oscuro .burbuja-propia {
@@ -57,10 +188,69 @@ body.tema-oscuro .burbuja-propia {
     color: #fff;
 }
 
-body.tema-oscuro .dropdown-notificaciones,
-body.tema-oscuro .contenido-dropdown,
+/* ========================= */
+/* PANEL DE SUPERUSUARIO      */
+/* ========================= */
+
+body.tema-oscuro .menu-superusuario > a,
+body.tema-oscuro .btn-dropdown-super {
+    background: var(--celeste-claro);
+    color: var(--azul-principal);
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .menu-superusuario > a:hover,
+body.tema-oscuro .btn-dropdown-super:hover {
+    background: #24384a;
+}
+
+body.tema-oscuro .activo-super {
+    background: linear-gradient(135deg, var(--azul-principal), var(--azul-secundario)) !important;
+    color: #0d1420 !important;
+}
+
 body.tema-oscuro .contenido-dropdown-super {
-    background-color: #2a2a2a;
-    color: #e0e0e0;
-    border-color: #444;
+    background: #182430;
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .contenido-dropdown-super a {
+    background: transparent;
+    color: var(--azul-principal);
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .contenido-dropdown-super a:hover {
+    background: var(--celeste-claro);
+}
+
+body.tema-oscuro .cuerpo-superusuario {
+    background: linear-gradient(135deg, #101a24, #16212c);
+    border-color: var(--borde);
+    box-shadow: inset 6px 6px 15px rgba(0, 0, 0, 0.35),
+                inset -6px -6px 15px rgba(255, 255, 255, 0.02);
+}
+
+body.tema-oscuro .tarjeta-bienvenida-super {
+    background: #141e29;
+    border-color: var(--borde);
+}
+
+body.tema-oscuro .sin-foto-super {
+    background: var(--celeste-claro);
+    color: var(--azul-principal);
+    border-color: var(--celeste);
+}
+
+body.tema-oscuro .datos-superusuario h2 {
+    color: var(--azul-texto);
+}
+
+body.tema-oscuro .datos-superusuario th {
+    color: var(--azul-principal);
+}
+
+body.tema-oscuro .datos-superusuario td {
+    color: var(--azul-texto);
+    border-color: var(--borde);
 }

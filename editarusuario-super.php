@@ -63,6 +63,10 @@ $tipoActual = $r["tipo"];
                     if ($_GET["error"] == "correo") {
                         echo "<div class='mensaje-error'>El correo ya está siendo usado por otro usuario.</div>";
                     }
+
+                    if ($_GET["error"] == "password") {
+                        echo "<div class='mensaje-error'>La nueva contraseña debe tener exactamente 8 caracteres.</div>";
+                    }
                 }
 
                 if (isset($_GET["ok"])) {
@@ -166,6 +170,12 @@ $tipoActual = $r["tipo"];
                 <div class="grupo-datos-faustinder">
                     <label>Descripción</label>
                     <textarea name="txtdescripcion" maxlength="250" required><?php echo htmlspecialchars($r["descripcion"]); ?></textarea>
+                </div>
+
+                <div class="grupo-datos-faustinder">
+                    <label>Nueva contraseña (opcional)</label>
+                    <input type="password" name="txtnuevapassword" maxlength="8" placeholder="Déjalo vacío para no cambiarla">
+                    <small style="color:#52697a; font-size:12px;">Si el usuario olvidó su contraseña, escribe una nueva de exactamente 8 caracteres. Si lo dejas vacío, su contraseña actual no se toca.</small>
                 </div>
 
                 <button type="submit" class="btn-datos-faustinder">

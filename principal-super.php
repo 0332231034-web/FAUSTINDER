@@ -8,6 +8,7 @@ $sql = "select * from tbsuperusuario where codigo='$codigoSuper'";
 $f = mysqli_query($cn, $sql);
 
 if (mysqli_num_rows($f) == 0) {
+    session_destroy();
     header("location: login.php");
     exit();
 }
@@ -18,6 +19,9 @@ $nombreCompleto = $r["nombre"] . " " . $r["apaterno"] . " " . $r["amaterno"];
 
 $fotoFisica = __DIR__ . "/img/super_" . $codigoSuper . ".png";
 $fotoWeb = "img/super_" . $codigoSuper . ".png";
+
+// Modo oscuro
+$modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +30,9 @@ $fotoWeb = "img/super_" . $codigoSuper . ".png";
     <meta charset="UTF-8">
     <title>Principal Superusuario - FAUSTINder</title>
     <link rel="stylesheet" href="css/estilo.css">
+    <link rel="stylesheet" href="css/modo-oscuro.css">
 </head>
-<body>
+<body class="<?php echo $modoOscuro ? 'tema-oscuro' : ''; ?>">
 
 <div class="panel-superusuario">
 
@@ -39,9 +44,17 @@ $fotoWeb = "img/super_" . $codigoSuper . ".png";
                 <h1>FAUSTINder</h1>
             </div>
 
-            <a href="cerrarsesion-super.php" class="btn-salir-faustinder">
-                Cerrar sesión
-            </a>
+            <div class="acciones-encabezado-faustinder">
+
+                <a href="#" id="btnModoOscuro" class="btn-modo-oscuro" title="Cambiar tema">
+                    <?php echo $modoOscuro ? '☀️' : '🌙'; ?>
+                </a>
+
+                <a href="cerrarsesion-super.php" class="btn-salir-faustinder">
+                    Cerrar sesión
+                </a>
+
+            </div>
 
         </div>
 
@@ -152,6 +165,8 @@ $fotoWeb = "img/super_" . $codigoSuper . ".png";
     </div>
 
 </div>
+
+<script src="js/modo-oscuro.js"></script>
 
 </body>
 </html>

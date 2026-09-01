@@ -14,7 +14,7 @@ $sqlContar = "select count(*) as total from tbfoto where codigo_persona='$codigo
 $fContar = mysqli_query($cn, $sqlContar);
 $rContar = mysqli_fetch_assoc($fContar);
 
-if ($rContar["total"] >= 5) {
+if ($rContar["total"] >= 10) {
     header("location: imagenperfil.php?error=limite");
     exit();
 }
