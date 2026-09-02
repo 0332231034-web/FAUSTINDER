@@ -42,6 +42,15 @@ $sqlInsertar = "insert into tbmensaje (codigo_match, emisor, receptor, mensaje, 
 
 mysqli_query($cn, $sqlInsertar);
 
+// Al enviar el mensaje, ya no está "escribiendo" (limpia el indicador para el otro usuario)
+try {
+    $sqlLimpiarEscribiendo = "update tbpersona set escribiendo_match=NULL where codigo='$codigoUsuarioSQL'";
+    mysqli_query($cn, $sqlLimpiarEscribiendo);
+} catch (Throwable $e) {
+    // La migración de escribiendo_match / escribiendo_fecha todavía no se corrió; se ignora.
+}
+
+
 // Obtener el nick de quien envía, para armar el texto de la notificación
 $sqlEmisor = "select nick from tbpersona where codigo='$codigoUsuarioSQL'";
 $fEmisor = mysqli_query($cn, $sqlEmisor);

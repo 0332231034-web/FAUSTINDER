@@ -107,6 +107,10 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
                     <div id="listaNotificaciones" class="dropdown-notificaciones">
 
+                        <?php if ($totalNotifNoLeidas > 0) { ?>
+                            <button type="button" id="btnMarcarTodoLeido" class="btn-marcar-todo-leido">Marcar todo como leído</button>
+                        <?php } ?>
+
                         <?php if (mysqli_num_rows($fListaNotif) == 0) { ?>
 
                             <div class="notif-vacia">No tienes notificaciones.</div>
@@ -115,16 +119,30 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
                             <?php while ($n = mysqli_fetch_assoc($fListaNotif)) { ?>
 
+                                <?php
+                                $checkLeida = '';
+                                if ($n["leida"] == "N") {
+                                    $checkLeida = '<button type="button" class="btn-check-notif" title="Marcar como leída" '
+                                        . 'data-tipo="' . htmlspecialchars($n["tipo"]) . '" '
+                                        . 'data-relacionado="' . htmlspecialchars($n["codigo_relacionado"]) . '" '
+                                        . 'data-fecha="' . htmlspecialchars($n["fecha"]) . '">&#10003;</button>';
+                                }
+                                ?>
+
                                 <?php if ($n["tipo"] == "MENSAJE" && $n["codigo_relacionado"] != NULL) { ?>
 
-                                    <a href="chat.php?match=<?php echo urlencode($n["codigo_relacionado"]); ?>" class="item-notificacion <?php echo $n["leida"] == "N" ? 'notif-no-leida' : ''; ?>" style="display:block; text-decoration:none; color:inherit;">
-                                        <p><?php echo htmlspecialchars($n["mensaje"]); ?></p>
-                                        <span class="fecha-notif"><?php echo $n["fecha"]; ?></span>
-                                    </a>
+                                    <div class="item-notificacion <?php echo $n["leida"] == "N" ? 'notif-no-leida' : ''; ?>">
+                                        <?php echo $checkLeida; ?>
+                                        <a href="chat.php?match=<?php echo urlencode($n["codigo_relacionado"]); ?>" style="text-decoration:none; color:inherit;">
+                                            <p><?php echo htmlspecialchars($n["mensaje"]); ?></p>
+                                            <span class="fecha-notif"><?php echo $n["fecha"]; ?></span>
+                                        </a>
+                                    </div>
 
                                 <?php } else { ?>
 
                                     <div class="item-notificacion <?php echo $n["leida"] == "N" ? 'notif-no-leida' : ''; ?>">
+                                        <?php echo $checkLeida; ?>
                                         <p><?php echo htmlspecialchars($n["mensaje"]); ?></p>
                                         <span class="fecha-notif"><?php echo $n["fecha"]; ?></span>
                                     </div>
@@ -383,6 +401,67 @@ document.addEventListener('click', function(e) {
         });
     }
 });
+
+document.querySelectorAll('.btn-check-notif').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        marcarNotifComoLeida(btn);
+    });
+});
+
+function marcarNotifComoLeida(btn) {
+    const item = btn.closest('.item-notificacion');
+    const body = 'tipo=' + encodeURIComponent(btn.dataset.tipo)
+        + '&relacionado=' + encodeURIComponent(btn.dataset.relacionado)
+        + '&fecha=' + encodeURIComponent(btn.dataset.fecha);
+
+    return fetch('p_marcarnotificacion.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: body
+    }).then(function() {
+        item.classList.remove('notif-no-leida');
+        btn.remove();
+        actualizarBadgeYBotonGlobal();
+    });
+}
+
+function actualizarBadgeYBotonGlobal() {
+    const restantes = document.querySelectorAll('.notif-no-leida').length;
+    const badge = document.querySelector('.btn-campana .badge-notificacion');
+    const btnTodo = document.getElementById('btnMarcarTodoLeido');
+
+    if (restantes > 0) {
+        if (badge) badge.textContent = restantes;
+    } else {
+        if (badge) badge.remove();
+        if (btnTodo) btnTodo.remove();
+    }
+}
+
+const btnMarcarTodoLeido = document.getElementById('btnMarcarTodoLeido');
+if (btnMarcarTodoLeido) {
+    btnMarcarTodoLeido.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        fetch('p_marcartodasnotificaciones.php', { method: 'POST' })
+            .then(function() {
+                document.querySelectorAll('.item-notificacion.notif-no-leida').forEach(function(item) {
+                    item.classList.remove('notif-no-leida');
+                });
+                document.querySelectorAll('.btn-check-notif').forEach(function(b) { b.remove(); });
+                const badge = document.querySelector('.btn-campana .badge-notificacion');
+                if (badge) badge.remove();
+                btnMarcarTodoLeido.remove();
+            });
+    });
+}
+
+setInterval(function() {
+    fetch('p_heartbeat.php');
+}, 20000);
 </script>
 
 </body>

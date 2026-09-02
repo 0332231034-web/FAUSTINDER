@@ -184,7 +184,7 @@ body.tema-oscuro .burbuja-otro {
 }
 
 body.tema-oscuro .burbuja-propia {
-    background-color: #1e5aa0;
+    background-color: #a5342a;
     color: #fff;
 }
 
@@ -253,4 +253,37 @@ body.tema-oscuro .datos-superusuario th {
 body.tema-oscuro .datos-superusuario td {
     color: var(--azul-texto);
     border-color: var(--borde);
+}
+
+/* Escribiendo... y botón de marcar leída, en modo oscuro */
+body.tema-oscuro .burbuja-escribiendo {
+    background-color: #24313e;
+}
+
+body.tema-oscuro .burbuja-escribiendo span {
+    background-color: var(--gris-texto);
+}
+
+body.tema-oscuro .btn-check-notif {
+    background: #182430;
+    color: var(--azul-principal);
+    border-color: var(--azul-principal);
+}
+
+body.tema-oscuro .btn-check-notif:hover {
+    background: var(--azul-principal);
+    color: #0d1420;
+}
+
+body.tema-oscuro .btn-marcar-todo-leido {
+    background: var(--azul-principal);
+    color: #0d1420;
+}
+
+body.tema-oscuro .btn-marcar-todo-leido:hover {
+    background: var(--azul-secundario);
+}
+
+body.tema-oscuro .punto-en-linea.punto-activo {
+    border-color: #141e29;
 }

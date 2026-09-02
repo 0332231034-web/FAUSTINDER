@@ -2532,7 +2532,7 @@ body {
 
 .burbuja-propia {
     align-self: flex-end;
-    background-color: #1e5aa0;
+    background-color: #c0392b;
     color: #fff;
 }
 
@@ -2570,4 +2570,125 @@ body {
     padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
+}
+/* Punto de "en línea" sobre la foto de perfil */
+.foto-chat-lista, .col-foto-match {
+    position: relative;
+}
+
+.punto-en-linea {
+    display: none;
+}
+
+.punto-en-linea.punto-activo {
+    display: block;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background-color: #2ecc71;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+
+/* Ticks de enviado / entregado / leído */
+.ticks-mensaje {
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 4px;
+    letter-spacing: -2px;
+}
+
+.tick-enviado, .tick-entregado {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.burbuja-otro .tick-enviado,
+.burbuja-otro .tick-entregado {
+    color: #999;
+}
+
+.tick-leido {
+    color: #4fc3f7 !important;
+    text-shadow: 0 0 1px rgba(0,0,0,0.35);
+}
+
+/* Animación de "escribiendo..." — puntos tipo ola/gusanito, sin texto */
+.burbuja-escribiendo {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 16px;
+    background-color: #f0f0f0;
+    border-radius: 14px;
+    width: fit-content;
+}
+
+.burbuja-escribiendo span {
+    width: 7px;
+    height: 7px;
+    background-color: #999;
+    border-radius: 50%;
+    animation: onda-escribiendo 1s infinite ease-in-out;
+}
+
+.burbuja-escribiendo span:nth-child(1) { animation-delay: 0s; }
+.burbuja-escribiendo span:nth-child(2) { animation-delay: 0.15s; }
+.burbuja-escribiendo span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes onda-escribiendo {
+    0%, 80%, 100% { transform: translateY(0) scale(0.85); opacity: 0.5; }
+    40% { transform: translateY(-6px) scale(1.1); opacity: 1; }
+}
+
+/* Botón de marcar notificación como leída (ícono check) */
+.item-notificacion {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.item-notificacion > a,
+.item-notificacion > p {
+    flex: 1;
+}
+
+.btn-check-notif {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 12px;
+    background: #fff;
+    color: #1e5aa0;
+    border: 1.5px solid #1e5aa0;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-check-notif:hover {
+    background: #1e5aa0;
+    color: #fff;
+}
+
+.btn-marcar-todo-leido {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #1e5aa0;
+    color: #fff;
+    border: none;
+    padding: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    position: sticky;
+    top: 0;
+}
+
+.btn-marcar-todo-leido:hover {
+    background: #164579;
 }

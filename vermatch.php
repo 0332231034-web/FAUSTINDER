@@ -113,7 +113,8 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
                         <?php
                         $codigoPersonaSQL = mysqli_real_escape_string($cn, $codigoPersona);
-                        $sqlPersona = "select * from tbpersona where codigo='$codigoPersonaSQL'";
+                        $sqlPersona = "select *, TIMESTAMPDIFF(SECOND, ultima_conexion, NOW()) as segundos_conexion
+                                       from tbpersona where codigo='$codigoPersonaSQL'";
                         $fPersona = mysqli_query($cn, $sqlPersona);
 
                         if (mysqli_num_rows($fPersona) > 0) {
@@ -139,17 +140,22 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
                             }
 
                             // Última conexión (solo se muestra cuando ya es match/chat habilitado)
+                            // El cálculo ocurre dentro de MySQL (TIMESTAMPDIFF) para no mezclar
+                            // el reloj de PHP con el de MySQL y evitar desfaces de zona horaria.
+                            $enLineaPersona = false;
                             $ultimaConexionTexto = "";
                             if ($estadoMatch == "CHAT" && $p["ultima_conexion"] != NULL) {
-                                $minutos = (strtotime("now") - strtotime($p["ultima_conexion"])) / 60;
-                                if ($minutos < 5) {
+                                $segundos = (int)$p["segundos_conexion"];
+                                $minutos = intdiv($segundos, 60);
+                                if ($segundos < 120) {
+                                    $enLineaPersona = true;
                                     $ultimaConexionTexto = "En línea";
                                 } else if ($minutos < 60) {
-                                    $ultimaConexionTexto = "Activo hace " . floor($minutos) . " min";
+                                    $ultimaConexionTexto = "Activo hace " . $minutos . " min";
                                 } else if ($minutos < 1440) {
-                                    $ultimaConexionTexto = "Activo hace " . floor($minutos / 60) . " h";
+                                    $ultimaConexionTexto = "Activo hace " . intdiv($minutos, 60) . " h";
                                 } else {
-                                    $ultimaConexionTexto = "Activo hace " . floor($minutos / 1440) . " días";
+                                    $ultimaConexionTexto = "Activo hace " . intdiv($minutos, 1440) . " días";
                                 }
                             }
                         ?>
@@ -162,6 +168,9 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
                                     <img src="<?php echo $fotoWeb . '?v=' . time(); ?>" alt="Foto">
                                 <?php } else { ?>
                                     <div class="sin-foto-match">❤</div>
+                                <?php } ?>
+                                <?php if ($estadoMatch == "CHAT") { ?>
+                                    <span class="punto-en-linea <?php echo $enLineaPersona ? 'punto-activo' : ''; ?>"></span>
                                 <?php } ?>
                             </div>
 
@@ -317,6 +326,10 @@ document.addEventListener('click', function(e) {
         });
     }
 });
+
+setInterval(function() {
+    fetch('p_heartbeat.php');
+}, 20000);
 </script>
 
 </body>

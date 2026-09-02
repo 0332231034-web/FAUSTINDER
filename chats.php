@@ -78,7 +78,10 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 
                         $codigoOtroSQL = mysqli_real_escape_string($cn, $codigoOtro);
 
-                        $sqlOtro = "select * from tbpersona where codigo='$codigoOtroSQL'";
+                        // El cálculo de tiempo ocurre dentro de MySQL (TIMESTAMPDIFF), para no mezclar
+                        // el reloj de PHP con el de MySQL y evitar desfaces de zona horaria.
+                        $sqlOtro = "select *, TIMESTAMPDIFF(SECOND, ultima_conexion, NOW()) as segundos_conexion
+                                    from tbpersona where codigo='$codigoOtroSQL'";
                         $fOtro = mysqli_query($cn, $sqlOtro);
                         $otro = mysqli_fetch_assoc($fOtro);
 
@@ -105,17 +108,20 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
                         $rNoLeidos = mysqli_fetch_assoc($fNoLeidos);
 
                         // Última conexión del otro usuario
+                        $enLineaOtro = false;
                         $ultimaConexionTexto = "Sin conexión reciente";
                         if ($otro["ultima_conexion"] != NULL) {
-                            $minutos = (strtotime("now") - strtotime($otro["ultima_conexion"])) / 60;
-                            if ($minutos < 5) {
+                            $segundos = (int)$otro["segundos_conexion"];
+                            $minutos = intdiv($segundos, 60);
+                            if ($segundos < 120) {
+                                $enLineaOtro = true;
                                 $ultimaConexionTexto = "En línea";
                             } else if ($minutos < 60) {
-                                $ultimaConexionTexto = "Activo hace " . floor($minutos) . " min";
+                                $ultimaConexionTexto = "Activo hace " . $minutos . " min";
                             } else if ($minutos < 1440) {
-                                $ultimaConexionTexto = "Activo hace " . floor($minutos / 60) . " h";
+                                $ultimaConexionTexto = "Activo hace " . intdiv($minutos, 60) . " h";
                             } else {
-                                $ultimaConexionTexto = "Activo hace " . floor($minutos / 1440) . " días";
+                                $ultimaConexionTexto = "Activo hace " . intdiv($minutos, 1440) . " días";
                             }
                         }
                         ?>
@@ -128,6 +134,7 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
                                 <?php } else { ?>
                                     <div class="sin-foto-match">❤</div>
                                 <?php } ?>
+                                <span class="punto-en-linea <?php echo $enLineaOtro ? 'punto-activo' : ''; ?>"></span>
                             </div>
 
                             <div class="info-chat-lista">
@@ -167,6 +174,11 @@ $modoOscuro = isset($_COOKIE["modo_oscuro"]) && $_COOKIE["modo_oscuro"] == "1";
 </div>
 
 <script src="js/modo-oscuro.js"></script>
+<script>
+setInterval(function() {
+    fetch('p_heartbeat.php');
+}, 20000);
+</script>
 
 </body>
 </html>
